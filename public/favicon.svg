@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#141522" />
+      <stop offset="100%" stop-color="#080911" />
+    </linearGradient>
+    <linearGradient id="crimsonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff3b3b" />
+      <stop offset="100%" stop-color="#ff7354" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="2.5" flood-color="#ff3b3b" flood-opacity="0.6" />
+    </filter>
+  </defs>
+  
+  <!-- Outer rounded background with glowing border -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#bgGrad)" stroke="#ff3b3b" stroke-width="2" stroke-opacity="0.5" />
+  
+  <!-- Stylized "V" Monogram -->
+  <path d="M 18,17 L 27,17 L 32,38 L 37,17 L 46,17 L 35.5,47 L 28.5,47 Z" fill="url(#crimsonGrad)" filter="url(#glow)" />
+  
+  <!-- Futuristic accent dot matching logo-dot in vikrant chakole. -->
+  <circle cx="47" cy="45" r="3.5" fill="#ff3b3b" filter="url(#glow)" />
+</svg>

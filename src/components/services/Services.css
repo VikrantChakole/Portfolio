@@ -1,0 +1,951 @@
+/* ==========================================================================
+   Services & Capabilities Component Styling (Client & Customer Focused)
+   Theme: Obsidian Crimson Glassmorphism & High-Contrast Typography
+   ========================================================================== */
+
+.services-section {
+  padding: 100px 20px 80px 20px;
+  scroll-margin-top: 85px;
+  position: relative;
+  background: radial-gradient(circle at 50% 10%, rgba(255, 59, 59, 0.05) 0%, transparent 60%),
+              radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.04) 0%, transparent 55%),
+              #070913;
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.services-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* --------------------------------------------------------------------------
+   Header & Category Filter Bar
+   -------------------------------------------------------------------------- */
+.services-header-block {
+  text-align: center;
+  max-width: 860px;
+  margin: 0 auto 3.5rem auto;
+}
+
+.services-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.4rem 1.1rem;
+  border-radius: 9999px;
+  background: rgba(255, 59, 59, 0.1);
+  border: 1px solid rgba(255, 59, 59, 0.3);
+  color: #ff5252;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 1.1rem;
+  box-shadow: 0 0 16px rgba(255, 59, 59, 0.2);
+}
+
+.services-badge-icon {
+  font-size: 0.9rem;
+  color: #ff3b3b;
+}
+
+.services-section .section-title {
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+.services-section .section-subtitle {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: #94a3b8;
+  margin-bottom: 2.2rem;
+}
+
+/* Filter pills */
+.services-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  margin-top: 1.5rem;
+}
+
+.services-filter-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: #94a3b8;
+  padding: 0.55rem 1.15rem;
+  border-radius: 9999px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.services-filter-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.services-filter-btn.active {
+  background: linear-gradient(135deg, rgba(255, 59, 59, 0.2) 0%, rgba(255, 59, 59, 0.08) 100%);
+  border-color: #ff3b3b;
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(255, 59, 59, 0.35);
+}
+
+/* --------------------------------------------------------------------------
+   Services Cards Grid
+   -------------------------------------------------------------------------- */
+.services-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 2rem;
+  margin-bottom: 5rem;
+  text-align: left;
+}
+
+/* Individual Client Card */
+.client-service-card {
+  position: relative;
+  background: rgba(13, 16, 27, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 22px;
+  padding: 2rem 1.85rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.35s ease,
+              border-color 0.35s ease;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65);
+}
+
+.client-service-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--srv-accent, #ff3b3b);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85),
+              0 0 30px color-mix(in srgb, var(--srv-accent, #ff3b3b) 22%, transparent);
+}
+
+/* Top Accent Glow Line */
+.srv-card-top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--srv-accent, #ff3b3b), transparent);
+  opacity: 0.9;
+}
+
+/* Meta row: Badge + Turnaround */
+.srv-card-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.srv-highlight-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--srv-accent, #ff3b3b) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--srv-accent, #ff3b3b) 30%, transparent);
+  color: var(--srv-accent, #ff5252);
+}
+
+.srv-turnaround-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.25rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.srv-meta-icon {
+  font-size: 0.72rem;
+  color: var(--srv-accent, #ff3b3b);
+}
+
+/* Head: Icon + Title */
+.srv-card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.3rem;
+}
+
+.srv-avatar-ring {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--srv-accent, #ff3b3b) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--srv-accent, #ff3b3b) 35%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.45rem;
+  color: var(--srv-accent, #ff3b3b);
+  flex-shrink: 0;
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.client-service-card:hover .srv-avatar-ring {
+  transform: scale(1.08) rotate(2deg);
+  filter: drop-shadow(0 0 10px var(--srv-accent, #ff3b3b));
+}
+
+.srv-title-text {
+  font-size: 1.22rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.35;
+  margin-bottom: 0.3rem;
+  letter-spacing: -0.01em;
+}
+
+.srv-tagline-text {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--srv-accent, #ff5252);
+  line-height: 1.45;
+}
+
+/* --------------------------------------------------------------------------
+   Problem vs Solution Box
+   -------------------------------------------------------------------------- */
+.srv-problem-solution-box {
+  background: rgba(8, 10, 18, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 1.1rem;
+  margin-bottom: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.srv-problem-row,
+.srv-solution-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.srv-row-icon-col {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.srv-row-icon-col.problem {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.srv-row-icon-col.solution {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.srv-row-text {
+  flex: 1;
+}
+
+.srv-row-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.2rem;
+}
+
+.srv-problem-row .srv-row-label {
+  color: #f87171;
+}
+
+.srv-solution-row .srv-row-label {
+  color: #34d399;
+}
+
+.srv-row-text p {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Business ROI Banner
+   -------------------------------------------------------------------------- */
+.srv-roi-banner {
+  background: color-mix(in srgb, var(--srv-accent, #ff3b3b) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--srv-accent, #ff3b3b) 22%, transparent);
+  border-radius: 10px;
+  padding: 0.65rem 0.95rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.srv-roi-title {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--srv-accent, #ff3b3b);
+}
+
+.srv-roi-val {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  line-height: 1.4;
+}
+
+/* --------------------------------------------------------------------------
+   Deliverables Checklist
+   -------------------------------------------------------------------------- */
+.srv-deliverables-container {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 0.95rem;
+  margin-bottom: 1.25rem;
+}
+
+.srv-deliverables-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.65rem;
+}
+
+.srv-deliverables-heading {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+}
+
+.srv-toggle-details-btn {
+  background: none;
+  border: none;
+  color: var(--srv-accent, #ff3b3b);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.srv-toggle-details-btn:hover {
+  color: #ffffff;
+}
+
+.srv-deliverables-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.srv-deliverables-list.collapsed .srv-deliverable-entry:nth-child(n+4) {
+  display: none;
+}
+
+.srv-deliverable-entry {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  font-size: 0.81rem;
+  line-height: 1.45;
+  color: #e2e8f0;
+}
+
+.srv-check-symbol {
+  font-size: 0.72rem;
+  color: var(--srv-accent, #10b981);
+  margin-top: 0.22rem;
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Tech Tags Wrapper
+   -------------------------------------------------------------------------- */
+.srv-tech-wrapper {
+  margin-top: auto;
+  margin-bottom: 1.3rem;
+}
+
+.srv-tech-label {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  margin-bottom: 0.45rem;
+}
+
+.srv-tech-tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.srv-tech-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+}
+
+/* --------------------------------------------------------------------------
+   Actions CTA
+   -------------------------------------------------------------------------- */
+.srv-card-actions {
+  margin-top: 0.4rem;
+}
+
+.srv-primary-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.75rem 1.1rem;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--srv-accent, #ff3b3b) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--srv-accent, #ff3b3b) 38%, transparent);
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.srv-primary-action-btn:hover {
+  background: var(--srv-accent, #ff3b3b);
+  border-color: var(--srv-accent, #ff3b3b);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--srv-accent, #ff3b3b) 50%, transparent);
+  transform: translateY(-2px);
+  color: #ffffff;
+}
+
+.srv-btn-arrow {
+  font-size: 0.76rem;
+  transition: transform 0.25s ease;
+}
+
+.srv-primary-action-btn:hover .srv-btn-arrow {
+  transform: translateX(4px);
+}
+
+/* Ambient Card Glow */
+.srv-ambient-glow {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--srv-accent, #ff3b3b) 16%, transparent) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(28px);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.client-service-card:hover .srv-ambient-glow {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   Section 2: "How We Work Together" 4-Step Process
+   ========================================================================== */
+.client-roadmap-block {
+  margin: 5rem 0;
+  padding: 3rem 2rem;
+  background: rgba(14, 16, 28, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 26px;
+  backdrop-filter: blur(14px);
+}
+
+.roadmap-header {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 3rem auto;
+}
+
+.roadmap-sub-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ff5252;
+  margin-bottom: 0.6rem;
+}
+
+.roadmap-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.8rem;
+}
+
+.roadmap-desc {
+  font-size: 0.96rem;
+  color: #94a3b8;
+  line-height: 1.6;
+}
+
+.roadmap-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  text-align: left;
+}
+
+.roadmap-step-card {
+  position: relative;
+  background: rgba(8, 10, 18, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 18px;
+  padding: 1.6rem 1.3rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.roadmap-step-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 59, 59, 0.4);
+}
+
+.step-number-tag {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: rgba(255, 59, 59, 0.35);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.step-timeframe {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #61dafb;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.step-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.65rem;
+}
+
+.step-desc {
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: #94a3b8;
+  margin-bottom: 1.1rem;
+}
+
+.step-deliverable-box {
+  margin-top: auto;
+  padding-top: 0.85rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.step-deliv-label {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #ff3b3b;
+  margin-bottom: 0.25rem;
+}
+
+.step-deliv-text {
+  font-size: 0.78rem;
+  color: #cbd5e1;
+  line-height: 1.45;
+}
+
+/* ==========================================================================
+   Section 3: Client Guarantees (Trust Pillars)
+   ========================================================================== */
+.client-guarantees-block {
+  margin: 5rem 0;
+  text-align: center;
+}
+
+.guarantees-header {
+  max-width: 680px;
+  margin: 0 auto 2.8rem auto;
+}
+
+.guarantee-pill {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #10b981;
+  margin-bottom: 0.5rem;
+}
+
+.guarantee-heading {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.6rem;
+}
+
+.guarantee-subheading {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  line-height: 1.6;
+}
+
+.guarantees-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.6rem;
+  text-align: left;
+}
+
+.guarantee-card {
+  background: rgba(14, 16, 28, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 1.8rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.guarantee-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--g-accent, #ff3b3b);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.guarantee-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--g-accent, #ff3b3b) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--g-accent, #ff3b3b) 35%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: var(--g-accent, #ff3b3b);
+  margin-bottom: 1.1rem;
+}
+
+.guarantee-card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.guarantee-card-desc {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: #94a3b8;
+}
+
+/* ==========================================================================
+   Section 4: FAQ Accordion
+   ========================================================================== */
+.client-faq-block {
+  max-width: 860px;
+  margin: 5rem auto;
+  text-align: left;
+}
+
+.faq-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.faq-badge-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #f59e0b;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 0.6rem;
+}
+
+.faq-badge-icon {
+  font-size: 0.85rem;
+}
+
+.faq-heading {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.6rem;
+}
+
+.faq-subheading {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  line-height: 1.55;
+}
+
+.faq-accordion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.faq-accordion-item {
+  background: rgba(14, 16, 28, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.faq-accordion-item.is-open {
+  border-color: rgba(255, 59, 59, 0.4);
+  background: rgba(18, 20, 35, 0.9);
+}
+
+.faq-question-btn {
+  width: 100%;
+  padding: 1.25rem 1.5rem;
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  cursor: pointer;
+  text-align: left;
+}
+
+.faq-question-text {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.4;
+}
+
+.faq-chevron {
+  font-size: 0.85rem;
+  color: #ff3b3b;
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.faq-chevron.rotated {
+  transform: rotate(180deg);
+}
+
+.faq-answer-pane {
+  padding: 0 1.5rem 1.35rem 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 1rem;
+}
+
+.faq-answer-pane p {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+/* ==========================================================================
+   Section 5: Direct Conversion CTA Banner
+   ========================================================================== */
+.services-cta-banner {
+  background: linear-gradient(135deg, rgba(255, 59, 59, 0.15) 0%, rgba(14, 16, 28, 0.95) 70%);
+  border: 1px solid rgba(255, 59, 59, 0.35);
+  border-radius: 24px;
+  padding: 3.2rem 2rem;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(255, 59, 59, 0.15);
+  margin-top: 4rem;
+}
+
+.cta-banner-content {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.cta-banner-tag {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #ff5252;
+  margin-bottom: 0.7rem;
+}
+
+.cta-banner-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.9rem;
+  letter-spacing: -0.01em;
+}
+
+.cta-banner-desc {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: #cbd5e1;
+  margin-bottom: 2rem;
+}
+
+.cta-btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+}
+
+.cta-primary-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 2rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #ff3b3b 0%, #ff5252 100%);
+  color: #ffffff;
+  font-size: 0.96rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(255, 59, 59, 0.5);
+  transition: all 0.25s ease;
+}
+
+.cta-primary-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(255, 59, 59, 0.7);
+  color: #ffffff;
+}
+
+.cta-secondary-action {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.85rem 1.6rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.cta-secondary-action:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .roadmap-steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .services-section {
+    padding: 70px 16px 50px 16px;
+    scroll-margin-top: 70px;
+  }
+
+  .services-section .section-title {
+    font-size: 2rem;
+  }
+
+  .services-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .client-service-card {
+    padding: 1.5rem 1.3rem;
+  }
+
+  .roadmap-steps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .client-roadmap-block {
+    padding: 2rem 1.2rem;
+  }
+
+  .services-cta-banner {
+    padding: 2.2rem 1.2rem;
+  }
+
+  .cta-banner-title {
+    font-size: 1.6rem;
+  }
+}
