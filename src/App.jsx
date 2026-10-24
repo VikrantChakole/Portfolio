@@ -3,7 +3,6 @@ import './App.css';
 import Timeline from './components/timeline/Timeline';
 import Skills from './components/skills/Skills';
 import Services from './components/services/Services';
-import profileImage from './assets/Image3_upright.jpg';
 import vikrantAvatar from './assets/vikrant_avatar.jpg';
 import nptelImage from './assets/certificates/NPTEL.png';
 import mern from './assets/certificates/VIKRANT PRASHANT CHAKOLE_MERN Stack Application Development.png';
@@ -29,6 +28,7 @@ import revGovImg from './assets/projects/rev_gov.jpg';
 import smartTechImg from './assets/projects/smart_technician.jpg';
 import mfgAssistantImg from './assets/projects/mfg_assistant.jpg';
 import resuminAiImg from './assets/projects/resumin_ai.jpg';
+import emailjs from 'emailjs-com';
 
 import {
   FaGithub,
@@ -69,6 +69,9 @@ import {
   FaShieldAlt,
   FaPaintBrush,
   FaCheck,
+  FaInfoCircle,
+  FaCopy,
+  FaTrophy,
 } from 'react-icons/fa';
 import { TbSparkles as TbSparklesCert } from 'react-icons/tb';
 
@@ -236,6 +239,7 @@ const projectsData = [
     accent: "#10b981",
     tagline: "Omnichannel voice-first statutory revenue service platform in 7 languages",
     description: "Enterprise-grade citizen revenue platform delivering statutory certificate services across Web, WhatsApp simulator, and IVR telephony with deterministic FSM governance, multimodal OCR, and automated PII redaction.",
+    impactMetric: '98%+ OCR accuracy • 7 Indian languages • Omnichannel delivery',
     highlights: [
       "Omnichannel delivery across Web, WhatsApp Simulator, and IVR Voice in 7 regional Indian languages",
       "Deterministic FSM engine coupled with Gemini 1.5 Flash LLM & multimodal OCR verification (98%+)",
@@ -254,6 +258,7 @@ const projectsData = [
     accent: "#00f0ff",
     tagline: "Offline-first hybrid RAG diagnostic & Lockout/Tagout safety copilot",
     description: "Industrial diagnostic platform combining edge-resilient hybrid RAG (NumPy vector store + BM25/RRF ranking), real-time telemetry anomaly detection, Lockout/Tagout (LOTO) safety enforcement, and acoustic vibration analysis.",
+    impactMetric: '<120ms local RAG retrieval • Offline-first edge AI • Industrial safety',
     highlights: [
       "Hybrid local RAG with SQLite + NumPy vector search & BM25 reciprocal rank fusion",
       "Multimodal vision & vibration spectrum analysis with Lockout/Tagout (LOTO) safety verification",
@@ -272,12 +277,13 @@ const projectsData = [
     accent: "#f59e0b",
     tagline: "Autonomous multi-agent copilot for plant changeover, telemetry & compliance audits",
     description: "Multi-agent industrial orchestration system streamlining manufacturing changeover procedures, real-time machine telemetry streams, recipe parameter validation, and computer vision defect detection.",
+    impactMetric: 'Multi-agent orchestration • Real-time IoT telemetry • Automated audits',
     highlights: [
       "Autonomous multi-agent architecture coordinating SOP supervisor, recipe auditor, and quality inspector",
       "Real-time IoT telemetry pipelines, P&ID visual schematic mapping, and automated batch audit reports",
     ],
     tech: ["FastAPI", "PostgreSQL", "LangChain Agents", "React Native", "Computer Vision", "Python"],
-    link: "https://github.com/VikrantChakole/Maufacturing-Assistant",
+    link: "https://github.com/VikrantChakole/Manufacturing-Assistant",
     demo: null,
     screenshot: mfgAssistantImg,
     featured: true,
@@ -290,6 +296,7 @@ const projectsData = [
     accent: "#8b5cf6",
     tagline: "AI-powered ATS scoring, keyword gap radar & intelligent resume enhancer",
     description: "Intelligent ATS optimization platform featuring semantic resume parsing, real-time compatibility score gauges (0-100), job description skill gap radar, and AI-driven quantifiable bullet point rewrites.",
+    impactMetric: 'Live production • ATS scoring 0–100 • Gemini NLP-powered',
     highlights: [
       "Real-time ATS score gauge & semantic skill gap detection against target job descriptions",
       "AI bullet point rephraser generating quantifiable impact metrics and keyword alignment",
@@ -342,11 +349,11 @@ const projectsData = [
     category: "Full Stack",
     badge: "⚡ Live Production",
     accent: "#61dafb",
-    tagline: "Obsidian crimson developer showcase with interactive 3D tech nodes",
-    description: "Personal brand developer platform featuring 3D faceted tech spheres, interactive neural skill clusters, audio accessibility, and modern obsidian-crimson glassmorphic interfaces.",
+    tagline: "Obsidian cyber-green developer showcase with interactive 3D tech nodes",
+    description: "Personal brand developer platform featuring 3D faceted tech spheres, interactive neural skill clusters, audio accessibility, and modern obsidian cyber-green glassmorphic interfaces.",
     highlights: [
       "Interactive 3D faceted SVG tech spheres & neural node network",
-      "Obsidian crimson glassmorphism with buttery smooth 60fps animations",
+      "Obsidian cyber-green glassmorphism with buttery smooth 60fps animations",
     ],
     tech: ["React.js", "Vite", "Vanilla CSS", "SVG 3D", "Responsive Design"],
     link: "https://github.com/VikrantChakole/Portfolio",
@@ -410,15 +417,91 @@ const projectsData = [
   },
 ];
 
+/**
+ * Programmer-style typewriter effect for Vikrant Chakole's name.
+ * Types characters out, pauses on completion, then backspaces and rewrites with
+ * distinct developer conventions (e.g. <Vikrant Chakole />, Vikrant_Chakole).
+ */
+const PROGRAMMER_NAME_VARIANTS = [
+  'Vikrant Chakole',
+  '<Vikrant Chakole />',
+  'Vikrant_Chakole',
+  'vikrant.chakole()',
+];
+
+const TypewriterName = () => {
+  const [variantIndex, setVariantIndex] = useState(0);
+  const [displayText, setDisplayText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentWord = PROGRAMMER_NAME_VARIANTS[variantIndex];
+    let timer;
+
+    if (!isDeleting) {
+      if (displayText.length < currentWord.length) {
+        timer = setTimeout(() => {
+          setDisplayText(currentWord.slice(0, displayText.length + 1));
+        }, 110);
+      } else {
+        // Pauses on the completed word so it's eye-catching and readable
+        timer = setTimeout(() => {
+          setIsDeleting(true);
+        }, 2200);
+      }
+    } else {
+      if (displayText.length > 0) {
+        timer = setTimeout(() => {
+          setDisplayText(currentWord.slice(0, displayText.length - 1));
+        }, 55);
+      } else {
+        // Finished backspacing, wait briefly and cycle to next programmer variant
+        timer = setTimeout(() => {
+          setIsDeleting(false);
+          setVariantIndex((prev) => (prev + 1) % PROGRAMMER_NAME_VARIANTS.length);
+        }, 350);
+      }
+    }
+
+    return () => clearTimeout(timer);
+  }, [displayText, isDeleting, variantIndex]);
+
+  const activeVariant = PROGRAMMER_NAME_VARIANTS[variantIndex];
+
+  return (
+    <span className="about-name-highlight programmer-name-wrap" aria-label="Vikrant Chakole">
+      {/* Invisible sizer reserves exact space of the current variant so word fits with zero extra gap */}
+      <span className="programmer-name-sizer" aria-hidden="true">
+        {activeVariant}
+        <span className="programmer-cursor-ghost" />
+      </span>
+      {/* Active animated typewriter text */}
+      <span className="programmer-name-active">
+        <span className="programmer-name-text">{displayText || '\u00A0'}</span>
+        <span className="programmer-cursor-bar" aria-hidden="true" />
+      </span>
+    </span>
+  );
+};
+
 function App() {
   const [selectedCert, setSelectedCert] = useState(null);
+  const [selectedProject, setSelectedProject] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [formSent, setFormSent] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showAllCerts, setShowAllCerts] = useState(false);
-  const [projectFilter, setProjectFilter] = useState('All');
+  const [emailCopied, setEmailCopied] = useState(false);
   const certsRef = React.useRef(null);
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText('vikrantchakole36@gmail.com').then(() => {
+      setEmailCopied(true);
+      setTimeout(() => setEmailCopied(false), 2000);
+    });
+  };
 
   const handleSelectService = (serviceTitle) => {
     setFormData((prev) => ({
@@ -457,15 +540,54 @@ function App() {
   const handleContactSubmit = (e) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
-    setFormSent(true);
-    setTimeout(() => {
-      setFormSent(false);
+
+    setIsSubmitting(true);
+
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+    if (serviceId && templateId && publicKey) {
+      emailjs
+        .send(
+          serviceId,
+          templateId,
+          {
+            from_name: formData.name,
+            from_email: formData.email,
+            message: formData.message,
+            reply_to: formData.email,
+            to_name: 'Vikrant Chakole',
+            to_email: 'vikrantchakole36@gmail.com',
+          },
+          publicKey
+        )
+        .then(() => {
+          setIsSubmitting(false);
+          setFormSent(true);
+          setFormData({ name: '', email: '', message: '' });
+          setTimeout(() => setFormSent(false), 5000);
+        })
+        .catch((error) => {
+          console.error('EmailJS error:', error?.text || error);
+          setIsSubmitting(false);
+          window.location.href = `mailto:vikrantchakole36@gmail.com?subject=Contact from ${encodeURIComponent(formData.name)}&body=${encodeURIComponent(formData.message + '\n\nFrom: ' + formData.name + ' (' + formData.email + ')')}`;
+          setFormSent(true);
+          setFormData({ name: '', email: '', message: '' });
+          setTimeout(() => setFormSent(false), 5000);
+        });
+    } else {
+      // Direct mailto fallback when API keys are not yet configured
+      setIsSubmitting(false);
+      window.location.href = `mailto:vikrantchakole36@gmail.com?subject=Portfolio Inquiry from ${encodeURIComponent(formData.name)}&body=${encodeURIComponent(formData.message + '\n\nSender: ' + formData.name + ' (' + formData.email + ')')}`;
+      setFormSent(true);
       setFormData({ name: '', email: '', message: '' });
-    }, 4500);
+      setTimeout(() => setFormSent(false), 5000);
+    }
   };
 
   useEffect(() => {
-    if (selectedCert) {
+    if (selectedCert || selectedProject) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
@@ -473,7 +595,7 @@ function App() {
     return () => {
       document.body.style.overflow = 'auto';
     };
-  }, [selectedCert]);
+  }, [selectedCert, selectedProject]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -521,8 +643,10 @@ function App() {
       {/* Top Header (ss3 style) */}
       <header className="header header-ss3">
         <div className="container header-container">
-          <a href="#home" className="logo">
-            Vikrant Chakole<span className="logo-dot">.</span>
+          <a href="#home" className="logo" aria-label="Vikrant Chakole Portfolio Home">
+            <span className="logo-first">Vikrant</span>
+            <span className="logo-last">Chakole</span>
+            <span className="logo-dot">.</span>
           </a>
 
           <div className="header-socials">
@@ -575,13 +699,26 @@ function App() {
           <div className="container hero-container">
             {/* Left Column: Heading, Subtitle & Circular Project Badge */}
             <div className="hero-content-left">
+              {/* Recruiter-Focused Availability Badge */}
+              <div className="hero-status-badge">
+                <span className="status-beacon-dot" />
+                <span>Open to Full-Time Roles &amp; Collaborations</span>
+              </div>
+
               <h1 className="hero-main-title">
-                Transforming Ideas<br />
-                Into <span className="hero-accent-text">Digital Reality.</span>
+                Turning Intelligence<br />
+                Into  <span className="hero-accent-text">Innovation.</span>
               </h1>
               <p className="hero-desc">
-                Generative AI Developer & Full Stack Engineer specializing in Large Language Models, Autonomous Agents, Computer Vision, and production-ready intelligent web architectures.
+                Generative AI Developer &amp; Full Stack Engineer specializing in Large Language Models, Autonomous Agents, Computer Vision, and production-ready intelligent web architectures.
               </p>
+
+              {/* Micro-Proof Credential Chips */}
+              <div className="hero-proof-chips">
+                <span className="hero-proof-chip"><FaBriefcase className="proof-icon" /> TCS Project Intern</span>
+                <span className="hero-proof-chip"><FaTrophy className="proof-icon" /> Best Paper — AIDCon 2025</span>
+                <span className="hero-proof-chip"><FaShieldAlt className="proof-icon" /> Fortinet &amp; Microsoft Certified</span>
+              </div>
 
               <div className="hero-actions-row">
                 {/* Circular Rotating "MY PROJECTS" Badge (ss3 style) */}
@@ -607,8 +744,14 @@ function App() {
                   <a href="#contact" className="hero-primary-btn">
                     Get In Touch
                   </a>
-                  <a href="#about" className="hero-secondary-btn">
-                    About Me
+                  <a
+                    href={Resume}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hero-resume-btn"
+                    aria-label="Preview Vikrant Chakole's CV"
+                  >
+                    <FaEye className="btn-icon" /> Preview CV
                   </a>
                 </div>
               </div>
@@ -633,46 +776,118 @@ function App() {
 
         {/* About Section */}
         <section id="about" className="about-section">
-          <div className="about-header">
-            <h2 className="section-title">About Me</h2>
-            <p className="section-subtitle">
-              Passionate developer dedicated to pioneering AI technologies and clean software craft
-            </p>
+          <div className="about-header section-header-block">
+            <h2 className="section-title" data-watermark="ABOUT">
+              About <span className="title-accent">Me<span className="title-dot">.</span></span>
+            </h2>
           </div>
           <div className="container">
             <div className="about-content">
               <div className="about-text">
-                <h2>
-                  I’m <span>Vikrant Chakole</span>, a Generative AI Developer focused on building intelligent, creative, and efficient AI-powered applications.
-                </h2>
-                <p className="text">
-                  I have completed my B.Tech in <strong>Computer Science Engineering</strong> with Specialization in <strong>Cyber Security</strong> from St. Vincent Pallotti College of Engineering and Technology, Nagpur. With a strong foundation in frontend and backend development, Generative AI, and Machine Learning, I enjoy transforming innovative ideas into intelligent, scalable, and efficient digital solutions using modern technologies.
+                <h3 className="about-lead-headline">
+                  I’m <TypewriterName /> , a <span className="about-role-highlight">Generative AI Developer</span> focused on building intelligent, creative, and efficient AI-powered applications.
+                </h3>
+                <p className="about-bio-text">
+                  I have completed my B.Tech in <strong className="about-cse-highlight">Computer Science Engineering</strong> with Specialization in <strong className="about-cse-highlight">Cyber Security</strong> from St. Vincent Pallotti College of Engineering and Technology, Nagpur. With a strong foundation in frontend and backend development, <strong className="about-skill-highlight">Generative AI</strong>, and <strong className="about-skill-highlight">Machine Learning</strong>, I enjoy transforming innovative ideas into intelligent, scalable, and efficient digital solutions using modern technologies.
                 </p>
-                <p className="text">
-                  I’m passionate about <strong>Generative AI, Machine Learning, Full Stack Development, React.js, and Python</strong>. I enjoy building intelligent, scalable applications that combine powerful AI capabilities with smooth, responsive user experiences. Outside of coding, I love exploring new technologies, discovering new places, experimenting with innovative ideas, and continuously learning.
+                <p className="about-bio-text">
+                  I’m passionate about <strong className="about-skill-highlight">Generative AI</strong>, <strong className="about-skill-highlight">Machine Learning</strong>, <strong className="about-skill-highlight">Full Stack Development</strong>, <strong className="about-skill-highlight">React.js</strong>, and <strong className="about-skill-highlight">Python</strong>. I enjoy building intelligent, scalable applications that combine powerful AI capabilities with smooth, responsive user experiences. Outside of coding, I love exploring new technologies, discovering new places, experimenting with innovative ideas, and continuously learning.
                 </p>
 
                 <div className="cv-section about-cv-inline">
-                  <a href={Resume} className="btn-down" download>
+                  <a href={Resume} className="btn-down btn-down-primary" download="Vikrant_Chakole_Resume.pdf" aria-label="Download Vikrant Chakole's CV">
                     <FaDownload className="icon" />
                     Download CV
                   </a>
-                  <a href={Resume} className="btn-down" target="_blank" rel="noopener noreferrer">
-                    <FaEye className="icon" />
-                    Preview CV
+                  <a href="#projects" className="btn-down btn-down-secondary" aria-label="Explore Projects">
+                    <FaLaptopCode className="icon" />
+                    Explore Projects
                   </a>
                 </div>
               </div>
 
-              <div className="about-image-card">
-                <div className="about-img-glow" aria-hidden="true" />
-                <img
-                  src={profileImage}
-                  alt="Vikrant Chakole"
-                  className="profile-img"
-                  onContextMenu={(e) => e.preventDefault()}
-                  draggable="false"
-                />
+              <div className="about-hud-wrapper">
+                <div className="about-hud-glow" aria-hidden="true" />
+                <div className="about-hud-glow-cyan" aria-hidden="true" />
+
+                <div className="about-hud-terminal">
+                  {/* Terminal Header */}
+                  <div className="terminal-header">
+                    <div className="terminal-controls" aria-hidden="true">
+                      <span className="control-dot close" />
+                      <span className="control-dot min" />
+                      <span className="control-dot max" />
+                    </div>
+                    <div className="terminal-title">
+                      <span className="terminal-prompt">$</span> cat vikrant.manifest.ts
+                    </div>
+                    <div className="terminal-status-pill">
+                      <span className="status-beacon" />
+                      <span>LIVE</span>
+                    </div>
+                  </div>
+
+                  {/* Code snippet with syntax highlighting */}
+                  <div className="terminal-body">
+                    <pre className="terminal-code">
+                      <code>
+                        <span className="code-line"><span className="code-num">01</span><span className="c-kw">const</span> <span className="c-var">engineer</span> = &#123;</span>
+                        <span className="code-line"><span className="code-num">02</span>  <span className="c-prop">name</span>: <span className="c-str">"Vikrant Chakole"</span>,</span>
+                        <span className="code-line"><span className="code-num">03</span>  <span className="c-prop">role</span>: <span className="c-str">"Generative AI &amp; Full-Stack"</span>,</span>
+                        <span className="code-line"><span className="code-num">04</span>  <span className="c-prop">specialty</span>: <span className="c-str">"RAG, Agents &amp; Vision AI"</span>,</span>
+                        <span className="code-line"><span className="code-num">05</span>  <span className="c-prop">degree</span>: <span className="c-str">"B.Tech CSE (Cyber Security)"</span>,</span>
+                        <span className="code-line"><span className="code-num">06</span>  <span className="c-prop">internship</span>: <span className="c-str">"TCS GenAI &amp; SWE"</span>,</span>
+                        <span className="code-line"><span className="code-num">07</span>  <span className="c-prop">accolade</span>: <span className="c-str">"Best Paper Award (AIDCon-2025)"</span>,</span>
+                        <span className="code-line"><span className="code-num">08</span>  <span className="c-prop">location</span>: <span className="c-str">"Nagpur, India"</span>,</span>
+                        <span className="code-line"><span className="code-num">09</span>  <span className="c-prop">status</span>: <span className="c-status">"Open to Opportunities"</span></span>
+                        <span className="code-line"><span className="code-num">10</span>&#125;;<span className="terminal-cursor">_</span></span>
+                      </code>
+                    </pre>
+                  </div>
+
+                  {/* Glanceable Credential Chips */}
+                  <div className="terminal-chips-grid">
+                    <div className="terminal-chip">
+                      <div className="chip-icon-box chip-gold">
+                        <FaAward />
+                      </div>
+                      <div className="chip-text">
+                        <span className="chip-label">AIDCon-2025</span>
+                        <span className="chip-val">Best Paper Award</span>
+                      </div>
+                    </div>
+
+                    <div className="terminal-chip">
+                      <div className="chip-icon-box chip-cyan">
+                        <FaBriefcase />
+                      </div>
+                      <div className="chip-text">
+                        <span className="chip-label">TCS Internship</span>
+                        <span className="chip-val">GenAI &amp; SWE</span>
+                      </div>
+                    </div>
+
+                    <div className="terminal-chip">
+                      <div className="chip-icon-box chip-crimson">
+                        <FaShieldAlt />
+                      </div>
+                      <div className="chip-text">
+                        <span className="chip-label">B.Tech Degree</span>
+                        <span className="chip-val">CSE (Cyber Security)</span>
+                      </div>
+                    </div>
+
+                    <div className="terminal-chip">
+                      <div className="chip-icon-box chip-purple">
+                        <FaRocket />
+                      </div>
+                      <div className="chip-text">
+                        <span className="chip-label">Projects</span>
+                        <span className="chip-val">10+ AI &amp; Web Apps</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -687,55 +902,20 @@ function App() {
         {/* Projects Section — Premium Redesign */}
         <section id="projects" className="projects-section" aria-label="Featured Projects">
           <div className="container projects-container">
-            {/* Header Block */}
-            <div className="projects-header-block">
-              <div className="projects-badge-pill">
-                <FaLaptopCode className="projects-badge-icon" />
-                <span>Flagship Engineering</span>
-              </div>
-              <h2 className="section-title">Featured Projects</h2>
-              <p className="section-subtitle">
-                Production-grade GenAI systems, scalable full-stack applications, and predictive machine learning models.
-              </p>
+            <div className="projects-header-block section-header-block">
+              <h2 className="section-title" data-watermark="PROJECTS">
+                Featured <span className="title-accent">Projects<span className="title-dot">.</span></span>
+              </h2>
             </div>
 
-            {/* Filter Tabs */}
-            <div className="projects-filter-bar" role="tablist" aria-label="Filter projects by category">
-              {['All', 'Featured', 'Generative AI', 'Full Stack', 'Machine Learning', 'APIs & Web'].map((category) => {
-                const count = category === 'All'
-                  ? projectsData.length
-                  : category === 'Featured'
-                    ? projectsData.filter((p) => p.featured).length
-                    : projectsData.filter((p) => p.category === category).length;
-                return (
-                  <button
-                    key={category}
-                    type="button"
-                    role="tab"
-                    aria-selected={projectFilter === category}
-                    className={`proj-filter-btn ${projectFilter === category ? 'active' : ''}`}
-                    onClick={() => setProjectFilter(category)}
-                  >
-                    <span>{category}</span>
-                    <span className="filter-count">{count}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Projects Grid */}
+            {/* Projects Grid — Streamlined, Scannable Representation */}
             <div className="projects-grid" role="list">
-              {(projectFilter === 'All'
-                ? projectsData
-                : projectFilter === 'Featured'
-                  ? projectsData.filter((p) => p.featured)
-                  : projectsData.filter((p) => p.category === projectFilter)
-              ).map((project, index) => (
+              {projectsData.map((project, index) => (
                 <div
                   className="project-card-v2"
                   key={project.id || project.title}
                   style={{
-                    '--proj-accent': project.accent || '#ff3b3b',
+                    '--proj-accent': project.accent || '#40ff00',
                     '--proj-delay': `${index * 80}ms`,
                   }}
                   role="listitem"
@@ -743,8 +923,12 @@ function App() {
                   {/* Top glowing accent line */}
                   <div className="proj-accent-bar" aria-hidden="true" />
 
-                  {/* Screenshot Media Container */}
-                  <div className="project-media-wrap">
+                  {/* Screenshot Media Container (clickable for details) */}
+                  <div
+                    className="project-media-wrap cursor-pointer"
+                    onClick={() => setSelectedProject(project)}
+                    title="Click to view architecture details"
+                  >
                     <img
                       src={project.screenshot}
                       alt={project.title}
@@ -762,36 +946,45 @@ function App() {
                     </div>
                   </div>
 
-                  {/* Project Info */}
+                  {/* Concise Project Info */}
                   <div className="project-info">
                     <div className="proj-heading-row">
-                      <h3 className="project-title">{project.title}</h3>
+                      <h3
+                        className="project-title cursor-pointer"
+                        onClick={() => setSelectedProject(project)}
+                        title="Click to view architecture details"
+                      >
+                        {project.title}
+                      </h3>
                       {project.tagline && (
                         <span className="project-tagline">{project.tagline}</span>
                       )}
                     </div>
 
-                    <p className="project-desc">{project.description}</p>
+                    <p className="project-desc-short">{project.description}</p>
 
-                    {/* Key Highlights */}
-                    {project.highlights && project.highlights.length > 0 && (
-                      <div className="proj-highlights-box">
-                        <ul className="proj-highlights-list">
-                          {project.highlights.map((item, hIdx) => (
-                            <li key={hIdx} className="proj-highlight-item">
-                              <FaCheck className="proj-highlight-check" />
-                              <span>{item}</span>
-                            </li>
-                          ))}
-                        </ul>
+                    {/* Impact Metric Ribbon (Recruiter Proof) */}
+                    {project.impactMetric && (
+                      <div className="project-impact-ribbon">
+                        <FaRocket className="impact-icon" />
+                        <span>{project.impactMetric}</span>
                       </div>
                     )}
 
-                    {/* Tech Pills */}
+                    {/* Clean Tech Badges (top 4 core) */}
                     <div className="project-tech-pills">
-                      {project.tech.map((tag) => (
+                      {project.tech.slice(0, 4).map((tag) => (
                         <span className="tech-pill" key={tag}>{tag}</span>
                       ))}
+                      {project.tech.length > 4 && (
+                        <span
+                          className="tech-pill-more cursor-pointer"
+                          onClick={() => setSelectedProject(project)}
+                          title={`+${project.tech.length - 4} more technologies`}
+                        >
+                          +{project.tech.length - 4}
+                        </span>
+                      )}
                     </div>
 
                     {/* Action Links */}
@@ -803,7 +996,7 @@ function App() {
                         className="project-btn-code"
                         aria-label={`View code for ${project.title}`}
                       >
-                        <FaGithub className="btn-icon" /> View Code
+                        <FaGithub className="btn-icon" /> Code
                       </a>
                       {project.demo && (
                         <a
@@ -814,9 +1007,17 @@ function App() {
                           aria-label={`Live demo for ${project.title}`}
                         >
                           <span className="live-pulse-dot" aria-hidden="true" />
-                          <FaExternalLinkAlt className="btn-icon" /> Live Demo
+                          <FaExternalLinkAlt className="btn-icon" /> Live
                         </a>
                       )}
+                      <button
+                        type="button"
+                        className="project-btn-details"
+                        onClick={() => setSelectedProject(project)}
+                        aria-label={`View architecture details for ${project.title}`}
+                      >
+                        <FaInfoCircle className="btn-icon" /> Specs
+                      </button>
                     </div>
                   </div>
 
@@ -826,6 +1027,99 @@ function App() {
               ))}
             </div>
           </div>
+
+          {/* Project Architecture & Details Modal */}
+          {selectedProject && (
+            <div className="modal-overlay" onClick={() => setSelectedProject(null)}>
+              <div
+                className="modal-content modern project-modal-content"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  className="modal-close-top"
+                  onClick={() => setSelectedProject(null)}
+                  aria-label="Close modal"
+                >
+                  ✖
+                </button>
+
+                <div className="modal-project-grid">
+                  <div className="modal-project-media">
+                    <img
+                      src={selectedProject.screenshot}
+                      alt={selectedProject.title}
+                      className="modal-proj-img"
+                    />
+                    <div className="modal-proj-badges">
+                      <span className="proj-cat-badge">{selectedProject.category}</span>
+                      {selectedProject.badge && (
+                        <span className="proj-feature-badge">{selectedProject.badge}</span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="modal-project-info">
+                    <div className="modal-proj-head">
+                      <span className="modal-proj-cat">{selectedProject.category}</span>
+                      <h3 className="modal-proj-title">{selectedProject.title}</h3>
+                      {selectedProject.tagline && (
+                        <p className="modal-proj-tagline">{selectedProject.tagline}</p>
+                      )}
+                    </div>
+
+                    <div className="modal-proj-overview">
+                      <h4 className="modal-section-heading">Overview</h4>
+                      <p className="modal-proj-desc">{selectedProject.description}</p>
+                    </div>
+
+                    {selectedProject.highlights && selectedProject.highlights.length > 0 && (
+                      <div className="modal-proj-highlights-block">
+                        <h4 className="modal-section-heading">Key Architecture &amp; Features</h4>
+                        <ul className="modal-proj-highlights-list">
+                          {selectedProject.highlights.map((item, idx) => (
+                            <li key={idx}>
+                              <FaCheck className="modal-check-icon" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    <div className="modal-proj-tech-block">
+                      <h4 className="modal-section-heading">Complete Tech Stack</h4>
+                      <div className="modal-tech-pills">
+                        {selectedProject.tech.map((t) => (
+                          <span key={t} className="tech-pill">{t}</span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="modal-proj-actions-row">
+                      <a
+                        href={selectedProject.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="modal-action-btn code"
+                      >
+                        <FaGithub className="btn-icon" /> View Source on GitHub
+                      </a>
+                      {selectedProject.demo && (
+                        <a
+                          href={selectedProject.demo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="modal-action-btn demo"
+                        >
+                          <span className="live-pulse-dot" /> Open Live Application
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </section>
 
         {/* Certifications Section — Premium Redesign */}
@@ -836,16 +1130,10 @@ function App() {
           ref={certsRef}
         >
           <div className="container certs-showcase-container">
-            {/* Header */}
-            <div className="certs-header-block">
-              <div className="certs-badge-pill">
-                <FaCertificate className="certs-badge-icon" />
-                <span>Verified Credentials</span>
-              </div>
-              <h2 className="section-title">Certifications &amp; Accreditations</h2>
-              <p className="section-subtitle">
-                Verified learning, technical expertise, and continuous professional growth.
-              </p>
+            <div className="certs-header-block section-header-block">
+              <h2 className="section-title" data-watermark="CREDENTIALS">
+                Certifications &amp; <span className="title-accent">Accreditations<span className="title-dot">.</span></span>
+              </h2>
             </div>
 
             {/* Certification Cards Grid */}
@@ -855,7 +1143,7 @@ function App() {
                   key={`${cert.title}-${index}`}
                   className={`cert-card-v2 ${cert.featured ? 'is-featured' : ''}`}
                   style={{
-                    '--cert-accent': cert.accent || '#ff3b3b',
+                    '--cert-accent': cert.accent || '#40ff00',
                     '--cert-delay': `${index * 80}ms`,
                   }}
                   onClick={() => setSelectedCert(cert)}
@@ -1002,8 +1290,10 @@ function App() {
         {/* Contact Section */}
         <section id="contact" className="contact-showcase">
           <div className="contact-container">
-            <div className="contact-header">
-              <h2 className="section-title">Get In Touch & Consultation</h2>
+            <div className="contact-header section-header-block">
+              <h2 className="section-title" data-watermark="CONTACT">
+                Get In <span className="title-accent">Touch<span className="title-dot">.</span></span>
+              </h2>
               <p className="contact-subtitle">
                 Have an AI project, full-stack opportunity, or research collaboration in mind? Let's connect!
               </p>
@@ -1016,9 +1306,19 @@ function App() {
                   <div className="contact-icon-bubble"><FaEnvelope /></div>
                   <div>
                     <span className="contact-label">Direct Email</span>
-                    <a href="mailto:vikrantchakole36@gmail.com" className="contact-direct-link">
-                      vikrantchakole36@gmail.com
-                    </a>
+                    <div className="contact-email-row">
+                      <a href="mailto:vikrantchakole36@gmail.com" className="contact-direct-link">
+                        vikrantchakole36@gmail.com
+                      </a>
+                      <button
+                        type="button"
+                        className={`copy-email-btn ${emailCopied ? 'copied' : ''}`}
+                        onClick={handleCopyEmail}
+                        title="Copy email to clipboard"
+                      >
+                        {emailCopied ? <><FaCheck /> Copied!</> : <><FaCopy /> Copy</>}
+                      </button>
+                    </div>
                   </div>
                 </div>
 
@@ -1068,7 +1368,7 @@ function App() {
                         type="text"
                         id="contact-name"
                         required
-                        placeholder="e.g. Alex Mercer"
+                        placeholder="e.g. Vikrant Chakole"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       />
@@ -1080,7 +1380,7 @@ function App() {
                         type="email"
                         id="contact-email"
                         required
-                        placeholder="e.g. alex@example.com"
+                        placeholder="e.g. vikrant@example.com"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       />
@@ -1098,8 +1398,13 @@ function App() {
                       ></textarea>
                     </div>
 
-                    <button type="submit" className="contact-submit-btn">
-                      <FaPaperPlane className="btn-icon" /> Send Message
+                    <button
+                      type="submit"
+                      className="contact-submit-btn"
+                      disabled={isSubmitting}
+                    >
+                      <FaPaperPlane className="btn-icon" />
+                      {isSubmitting ? 'Sending Message...' : 'Send Message'}
                     </button>
                   </form>
                 )}
@@ -1113,11 +1418,13 @@ function App() {
       <footer className="site-footer">
         <div className="container footer-container">
           <div className="footer-top">
-            <a href="#home" className="footer-logo">
-              vikrant chakole<span className="logo-dot">.</span>
+            <a href="#home" className="footer-logo" aria-label="Vikrant Chakole Portfolio Home">
+              <span className="logo-first">Vikrant</span>
+              <span className="logo-last">Chakole</span>
+              <span className="logo-dot">.</span>
             </a>
             <p className="footer-tagline">
-              Generative AI Developer & Full Stack Engineer • Transforming Ideas into Digital Reality.
+              Generative AI Developer & Full Stack Engineer • Making Intelligence Work for the World.
             </p>
             <div className="footer-socials">
               <a href="https://github.com/VikrantChakole" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><FaGithub /></a>

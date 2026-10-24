@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { skillCategories } from './skillsData';
 import { FaFire } from 'react-icons/fa';
-import { TbSparkles } from 'react-icons/tb';
 
 /* --------------------------------------------------------------------------
    Category accent colors — one per category for visual distinction
    -------------------------------------------------------------------------- */
 const categoryAccents = {
-  genai: '#ff3b3b',
+  genai: '#40ff00',
   'ml-vision': '#00f7ff',
   'ai-models': '#a855f7',
   'programming-data': '#38bdf8',
@@ -242,16 +241,10 @@ const Skills = () => {
     >
       <div className="container skills-network-container">
         {/* Header */}
-        <div className="skills-header-block">
-          <div className="skills-badge-pill">
-            <TbSparkles className="badge-sparkle-icon" />
-            <span>Technical Competencies</span>
-          </div>
-          <h2 className="section-title">Skills &amp; Technologies</h2>
-          <p className="section-subtitle">
-            Specialized in Generative AI architectures, Agentic orchestration,
-            Vision AI, and scalable production software.
-          </p>
+        <div className="skills-header-block section-header-block">
+          <h2 className="section-title" data-watermark="SKILLS">
+            Skills &amp; <span className="title-accent">Technologies<span className="title-dot">.</span></span>
+          </h2>
         </div>
 
         {/* Category clusters */}
@@ -260,7 +253,7 @@ const Skills = () => {
             <CategoryCluster
               key={cat.id}
               category={cat}
-              accent={categoryAccents[cat.id] || '#ff3b3b'}
+              accent={categoryAccents[cat.id] || '#40ff00'}
               connectors={categoryConnectors[cat.id] || []}
               animDelay={catIdx * 100}
             />

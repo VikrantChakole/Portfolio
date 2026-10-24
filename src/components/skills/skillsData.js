@@ -75,7 +75,7 @@ export const skillCategories = [
     isCoreFocus: true,
     categoryIcon: FaBrain,
     skills: [
-      { name: 'Generative AI', icon: TbSparkles, color: '#ff3b3b' },
+      { name: 'Generative AI', icon: TbSparkles, color: '#40ff00' },
       { name: 'Large Language Models (LLMs)', icon: FaComments, color: '#00f7ff' },
       { name: 'Prompt Engineering', icon: FaTerminal, color: '#38bdf8' },
       { name: 'Retrieval-Augmented Generation (RAG)', icon: FaProjectDiagram, color: '#34d399' },

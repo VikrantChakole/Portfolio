@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   FaRocket,
   FaRobot,
@@ -13,24 +13,24 @@ import {
   FaClock,
   FaArrowRight,
   FaChevronDown,
+  FaChevronUp,
   FaQuestionCircle,
   FaCogs,
   FaComments,
-  FaLightbulb,
-  FaExclamationCircle,
+  FaCheckCircle,
+  FaTimes,
 } from 'react-icons/fa';
 import {
   servicesData,
-  clientCategories,
   clientGuarantees,
   workProcessSteps,
   clientFaqs,
 } from './servicesData';
 import './Services.css';
 
-// Icon mapper for dynamic string icon types
-const renderServiceIcon = (iconType) => {
-  switch (iconType) {
+// Dynamic icon resolver
+const renderIcon = (iconName) => {
+  switch (iconName) {
     case 'FaRocket':
       return <FaRocket />;
     case 'FaRobot':
@@ -55,25 +55,47 @@ const renderServiceIcon = (iconType) => {
 };
 
 const Services = ({ onSelectService }) => {
-  const [activeCategory, setActiveCategory] = useState('all');
-  const [expandedFaq, setExpandedFaq] = useState(0); // First FAQ open by default
-  const [expandedDetails, setExpandedDetails] = useState({});
+  const [selectedDomain, setSelectedDomain] = useState(null);
+  const [expandedFaq, setExpandedFaq] = useState(0);
 
-  const toggleDetails = (serviceId) => {
-    setExpandedDetails((prev) => ({
-      ...prev,
-      [serviceId]: !prev[serviceId],
-    }));
+  // Close modal on Escape key & lock body scroll
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setSelectedDomain(null);
+      }
+    };
+
+    if (selectedDomain) {
+      document.body.style.overflow = 'hidden';
+      window.addEventListener('keydown', handleKeyDown);
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedDomain]);
+
+  const handleNextDomain = () => {
+    if (!selectedDomain) return;
+    const currentIndex = servicesData.findIndex((s) => s.id === selectedDomain.id);
+    const nextIndex = (currentIndex + 1) % servicesData.length;
+    setSelectedDomain(servicesData[nextIndex]);
+  };
+
+  const handlePrevDomain = () => {
+    if (!selectedDomain) return;
+    const currentIndex = servicesData.findIndex((s) => s.id === selectedDomain.id);
+    const prevIndex = (currentIndex - 1 + servicesData.length) % servicesData.length;
+    setSelectedDomain(servicesData[prevIndex]);
   };
 
   const toggleFaq = (index) => {
     setExpandedFaq(expandedFaq === index ? null : index);
   };
-
-  const filteredServices =
-    activeCategory === 'all'
-      ? servicesData
-      : servicesData.filter((srv) => srv.category === activeCategory);
 
   const handleInquire = (serviceTitle) => {
     if (onSelectService) {
@@ -88,176 +110,256 @@ const Services = ({ onSelectService }) => {
 
   return (
     <section id="services" className="services-section" aria-label="Services and Capabilities">
+      {/* Background ambient lighting */}
+      <div className="services-ambient-halo" aria-hidden="true" />
+
       <div className="services-container">
         {/* Section Header */}
-        <div className="services-header-block">
-          <div className="services-badge-pill">
-            <FaCogs className="services-badge-icon" />
-            <span>Built For Clients &amp; Founders</span>
-          </div>
-          <h2 className="section-title">Services &amp; Capabilities</h2>
-          <p className="section-subtitle">
-            Engineered for founders, startups, and growing teams. No confusing tech jargon — just clear business outcomes, guaranteed code ownership, and fast, predictable delivery.
-          </p>
-
-          {/* Quick Category / Problem Filter */}
-          <div className="services-filter-bar" role="tablist" aria-label="Filter Services">
-            {clientCategories.map((cat) => (
-              <button
-                key={cat.id}
-                type="button"
-                role="tab"
-                aria-selected={activeCategory === cat.id}
-                className={`services-filter-btn ${activeCategory === cat.id ? 'active' : ''}`}
-                onClick={() => setActiveCategory(cat.id)}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
+        <div className="services-header-block section-header-block">
+          <h2 className="section-title" data-watermark="SERVICES">
+            Services &amp; <span className="title-accent">Capabilities<span className="title-dot">.</span></span>
+          </h2>
         </div>
 
-        {/* Services Cards Grid */}
-        <div className="services-cards-grid">
-          {filteredServices.map((service, index) => {
-            const isExpanded = expandedDetails[service.id];
+        {/* Scannable Domain Preview Cards Grid */}
+        <div className="services-cards-grid compact-grid" role="list">
+          {servicesData.map((service, index) => {
             return (
-              <div
+              <article
                 key={service.id}
-                className="client-service-card"
+                className="client-service-card compact-domain-card"
                 style={{
                   '--srv-accent': service.accent,
-                  '--srv-delay': `${index * 80}ms`,
+                  '--srv-delay': `${index * 60}ms`,
                 }}
+                onClick={() => setSelectedDomain(service)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setSelectedDomain(service);
+                  }
+                }}
+                aria-label={`Inspect ${service.title} domain details`}
               >
-                {/* Glowing Accent Top Bar */}
+                {/* Glowing Top Accent Bar */}
                 <div className="srv-card-top-bar" aria-hidden="true" />
 
-                {/* Card Top: Badge & Turnaround */}
+                {/* Card Top Meta: Badge & Speed */}
                 <div className="srv-card-meta-row">
                   <span className="srv-highlight-badge">{service.badge}</span>
-                  <span className="srv-turnaround-badge">
+                  <div className="srv-turnaround-badge">
                     <FaClock className="srv-meta-icon" />
-                    <span>{service.typicalTurnaround}</span>
-                  </span>
+                    <span>{service.turnaround}</span>
+                  </div>
                 </div>
 
-                {/* Service Header */}
+                {/* Service Header: Icon + Title + 1-line Tagline */}
                 <div className="srv-card-head">
                   <div className="srv-avatar-ring">
-                    {renderServiceIcon(service.iconType)}
+                    {renderIcon(service.iconType)}
                   </div>
-                  <div>
+                  <div className="srv-title-wrapper">
                     <h3 className="srv-title-text">{service.title}</h3>
                     <p className="srv-tagline-text">{service.tagline}</p>
                   </div>
                 </div>
 
-                {/* Plain-English Problem ➔ Solution Comparison Box */}
-                <div className="srv-problem-solution-box">
-                  <div className="srv-problem-row">
-                    <div className="srv-row-icon-col problem">
-                      <FaExclamationCircle />
-                    </div>
-                    <div className="srv-row-text">
-                      <span className="srv-row-label">The Problem You Face:</span>
-                      <p>{service.clientProblem}</p>
-                    </div>
-                  </div>
-
-                  <div className="srv-solution-row">
-                    <div className="srv-row-icon-col solution">
-                      <FaLightbulb />
-                    </div>
-                    <div className="srv-row-text">
-                      <span className="srv-row-label">How I Solve It:</span>
-                      <p>{service.theSolution}</p>
-                    </div>
+                {/* Core Tech Stack Preview */}
+                <div className="srv-tech-preview">
+                  <div className="srv-tech-tags-list">
+                    {service.tech.slice(0, 4).map((t) => (
+                      <span key={t} className="srv-tech-badge">
+                        {t}
+                      </span>
+                    ))}
+                    {service.tech.length > 4 && (
+                      <span className="srv-tech-badge srv-more-badge">
+                        +{service.tech.length - 4} more
+                      </span>
+                    )}
                   </div>
                 </div>
 
-                {/* Key Business ROI Pill */}
-                <div className="srv-roi-banner">
-                  <span className="srv-roi-title">Business Outcome:</span>
-                  <span className="srv-roi-val">{service.businessROI}</span>
+                {/* Action Row: Click to view details */}
+                <div className="srv-card-bottom-action">
+                  <span className="srv-click-prompt">
+                    <span>View Technical Scope &amp; Details</span>
+                    <FaArrowRight className="srv-btn-arrow" />
+                  </span>
                 </div>
 
-                {/* Deliverables Block */}
-                <div className="srv-deliverables-container">
-                  <div className="srv-deliverables-header">
-                    <span className="srv-deliverables-heading">What You Receive:</span>
-                    <button
-                      type="button"
-                      className="srv-toggle-details-btn"
-                      onClick={() => toggleDetails(service.id)}
-                      aria-expanded={isExpanded}
-                    >
-                      {isExpanded ? 'Hide scope' : 'Full scope view'}
-                    </button>
-                  </div>
+                {/* Ambient Radial Hover Glow */}
+                <div className="srv-ambient-glow" aria-hidden="true" />
+              </article>
+            );
+          })}
+        </div>
 
-                  <ul className={`srv-deliverables-list ${isExpanded ? 'expanded' : 'collapsed'}`}>
-                    {service.deliverables.map((item, dIdx) => (
-                      <li key={dIdx} className="srv-deliverable-entry">
+        {/* Domain Deep-Dive Detail Modal */}
+        {selectedDomain && (
+          <div
+            className="srv-modal-backdrop"
+            onClick={() => setSelectedDomain(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-service-title"
+          >
+            <div
+              className="srv-modal-window"
+              onClick={(e) => e.stopPropagation()}
+              style={{ '--srv-accent': selectedDomain.accent }}
+            >
+              {/* Luminous Top Bar */}
+              <div className="srv-modal-top-bar" aria-hidden="true" />
+
+              {/* Close Button */}
+              <button
+                type="button"
+                className="srv-modal-close-btn"
+                onClick={() => setSelectedDomain(null)}
+                aria-label="Close domain details"
+              >
+                <FaTimes />
+              </button>
+
+              {/* Modal Header */}
+              <div className="srv-modal-header">
+                <div className="srv-modal-avatar-ring">
+                  {renderIcon(selectedDomain.iconType)}
+                </div>
+                <div className="srv-modal-title-wrap">
+                  <div className="srv-card-meta-row modal-meta">
+                    <span className="srv-highlight-badge">{selectedDomain.badge}</span>
+                    <div className="srv-turnaround-badge">
+                      <FaClock className="srv-meta-icon" />
+                      <span>Estimated Timeline: {selectedDomain.turnaround}</span>
+                    </div>
+                  </div>
+                  <h3 id="modal-service-title" className="srv-modal-title">
+                    {selectedDomain.title}
+                  </h3>
+                  <p className="srv-modal-tagline">{selectedDomain.tagline}</p>
+                </div>
+              </div>
+
+              {/* Modal Content Sections */}
+              <div className="srv-modal-body">
+                {/* Challenge & Solution */}
+                <div className="srv-contrast-box modal-contrast">
+                  <div className="srv-contrast-row pain">
+                    <span className="contrast-tag">The Challenge:</span>
+                    <span className="contrast-text">{selectedDomain.problem}</span>
+                  </div>
+                  <div className="srv-contrast-row solution">
+                    <span className="contrast-tag">My Solution:</span>
+                    <span className="contrast-text">{selectedDomain.solution}</span>
+                  </div>
+                </div>
+
+                {/* Value Outcome Pill */}
+                <div className="srv-outcome-pill modal-outcome">
+                  <span className="outcome-label">Value Impact &amp; ROI:</span>
+                  <span className="outcome-text">{selectedDomain.outcome}</span>
+                </div>
+
+                {/* Full Scope & Deliverables Checklist */}
+                <div className="srv-modal-section">
+                  <h4 className="srv-modal-subheading">
+                    <FaCheckCircle className="modal-subheading-icon" />
+                    Included Scope &amp; Deliverables:
+                  </h4>
+                  <ul className="srv-modal-deliverables-list">
+                    {selectedDomain.fullDeliverables.map((deliv, dIdx) => (
+                      <li key={dIdx} className="srv-modal-deliverable-entry">
                         <FaCheck className="srv-check-symbol" />
-                        <span>{item}</span>
+                        <span>{deliv}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                {/* Tech Pills (for technical advisors/reviewers) */}
-                <div className="srv-tech-wrapper">
-                  <span className="srv-tech-label">Core Technologies:</span>
-                  <div className="srv-tech-tags-list">
-                    {service.tech.map((t) => (
-                      <span key={t} className="srv-tech-badge">
+                {/* Architectural Tech Stack */}
+                <div className="srv-modal-section">
+                  <h4 className="srv-modal-subheading">
+                    <FaCogs className="modal-subheading-icon" />
+                    Core Architecture &amp; Tech Stack:
+                  </h4>
+                  <div className="srv-tech-tags-list modal-tech-list">
+                    {selectedDomain.tech.map((t) => (
+                      <span key={t} className="srv-tech-badge modal-badge">
                         {t}
                       </span>
                     ))}
                   </div>
                 </div>
+              </div>
 
-                {/* Action CTA */}
-                <div className="srv-card-actions">
+              {/* Modal Footer Controls */}
+              <div className="srv-modal-footer">
+                <div className="srv-modal-pager">
                   <button
                     type="button"
-                    className="srv-primary-action-btn"
-                    onClick={() => handleInquire(service.title)}
+                    className="srv-pager-btn"
+                    onClick={() => handlePrevDomain()}
+                    aria-label="Previous domain"
                   >
-                    <span>Discuss This Project</span>
-                    <FaArrowRight className="srv-btn-arrow" />
+                    ← Previous
+                  </button>
+                  <span className="srv-pager-indicator">
+                    {servicesData.findIndex((s) => s.id === selectedDomain.id) + 1} of {servicesData.length}
+                  </span>
+                  <button
+                    type="button"
+                    className="srv-pager-btn"
+                    onClick={() => handleNextDomain()}
+                    aria-label="Next domain"
+                  >
+                    Next →
                   </button>
                 </div>
 
-                {/* Card Glow */}
-                <div className="srv-ambient-glow" aria-hidden="true" />
+                <button
+                  type="button"
+                  className="srv-primary-action-btn modal-cta"
+                  onClick={() => {
+                    const title = selectedDomain.title;
+                    setSelectedDomain(null);
+                    handleInquire(title);
+                  }}
+                >
+                  <span>Discuss This Domain</span>
+                  <FaArrowRight className="srv-btn-arrow" />
+                </button>
               </div>
-            );
-          })}
-        </div>
+            </div>
+          </div>
+        )}
 
         {/* -------------------------------------------------------------
-            Section 2: "How We Work Together" — 4-Step Transparent Roadmap
+            Section 2: Streamlined 4-Step Collaborative Roadmap
             ------------------------------------------------------------- */}
         <div className="client-roadmap-block">
           <div className="roadmap-header">
             <span className="roadmap-sub-badge">Zero Guesswork • Complete Transparency</span>
             <h3 className="roadmap-title">How We Build Together (Step-by-Step)</h3>
             <p className="roadmap-desc">
-              Hiring a developer shouldn't feel like a black box. Here is the exact, collaborative process from our first message to live launch.
+              Hiring shouldn't feel like a black box. Here is the transparent, milestone-driven process from first message to live launch.
             </p>
           </div>
 
-          <div className="roadmap-steps-grid">
+          <div className="roadmap-stepper-track">
             {workProcessSteps.map((step) => (
               <div key={step.step} className="roadmap-step-card">
-                <div className="step-number-tag">{step.step}</div>
-                <div className="step-timeframe">{step.timeframe}</div>
+                <div className="step-card-header">
+                  <span className="step-num-pill">{step.step}</span>
+                  <span className="step-timeframe-tag">{step.timeframe}</span>
+                </div>
                 <h4 className="step-title">{step.title}</h4>
                 <p className="step-desc">{step.desc}</p>
                 <div className="step-deliverable-box">
-                  <span className="step-deliv-label">Tangible Deliverable:</span>
+                  <span className="step-deliv-label">Deliverable:</span>
                   <span className="step-deliv-text">{step.deliverable}</span>
                 </div>
               </div>
@@ -266,14 +368,14 @@ const Services = ({ onSelectService }) => {
         </div>
 
         {/* -------------------------------------------------------------
-            Section 3: Client Guarantees & Peace-of-Mind Trust Pillars
+            Section 3: Client Guarantees (Trust Pillars)
             ------------------------------------------------------------- */}
         <div className="client-guarantees-block">
           <div className="guarantees-header">
-            <span className="guarantee-pill">Your Peace of Mind</span>
+            <span className="guarantee-pill">Total Peace of Mind</span>
             <h3 className="guarantee-heading">The Client Satisfaction Standard</h3>
             <p className="guarantee-subheading">
-              Every partnership is backed by clear contracts, direct communication, and enterprise-grade reliability.
+              Every project is backed by clean contracts, prompt daily communication, and enterprise-grade reliability.
             </p>
           </div>
 
@@ -285,7 +387,7 @@ const Services = ({ onSelectService }) => {
                 style={{ '--g-accent': item.accent }}
               >
                 <div className="guarantee-icon-wrap">
-                  {renderServiceIcon(item.icon)}
+                  {renderIcon(item.icon)}
                 </div>
                 <h4 className="guarantee-card-title">{item.title}</h4>
                 <p className="guarantee-card-desc">{item.desc}</p>
@@ -295,17 +397,17 @@ const Services = ({ onSelectService }) => {
         </div>
 
         {/* -------------------------------------------------------------
-            Section 4: Client FAQ Accordion
+            Section 4: FAQ Accordion
             ------------------------------------------------------------- */}
         <div className="client-faq-block">
           <div className="faq-header">
             <div className="faq-badge-row">
               <FaQuestionCircle className="faq-badge-icon" />
-              <span>Frequently Asked Questions</span>
+              <span>Got Questions?</span>
             </div>
-            <h3 className="faq-heading">Got Questions Before Getting Started?</h3>
+            <h3 className="faq-heading">Frequently Asked Questions</h3>
             <p className="faq-subheading">
-              Everything you need to know about working together, pricing models, intellectual property, and timelines.
+              Everything you need to know about pricing models, code ownership, timelines, and communication.
             </p>
           </div>
 
@@ -349,7 +451,7 @@ const Services = ({ onSelectService }) => {
               Have an Idea, MVP, or AI Automation in Mind?
             </h3>
             <p className="cta-banner-desc">
-              Let's schedule a free 20-minute discovery chat. We'll discuss your goals, explore solutions, and provide an initial timeline estimate — completely free with zero commitment.
+              Let's schedule a free 20-minute discovery chat. We'll clarify requirements, discuss technical feasibility, and map out a fixed timeline estimate.
             </p>
             <div className="cta-btn-group">
               <button
@@ -361,7 +463,7 @@ const Services = ({ onSelectService }) => {
                 <span>Start a Project Inquiry</span>
               </button>
               <a href="mailto:vikrantchakole36@gmail.com" className="cta-secondary-action">
-                <span>Direct Email: vikrantchakole36@gmail.com</span>
+                <span>vikrantchakole36@gmail.com</span>
               </a>
             </div>
           </div>

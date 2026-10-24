@@ -18,8 +18,9 @@ const timelineData = [
     id: 'tcs-internship',
     title: 'Project Intern – Tata Consultancy Services (TCS)',
     organization: 'Tata Consultancy Services (TCS)',
-    period: 'September 2026 – Present',
+    period: 'Feb 2026 – Sep 2026',
     type: 'experience',
+    theme: 'tcs',
     badge: 'Latest Milestone',
     isLatest: true,
     description:
@@ -33,6 +34,7 @@ const timelineData = [
     organization: 'St. Vincent Pallotti College of Engineering and Technology, Nagpur',
     period: '2022 – 2026',
     type: 'education',
+    theme: 'cyan',
     badge: 'Undergraduate Degree',
     isLatest: false,
     description:
@@ -46,6 +48,7 @@ const timelineData = [
     organization: 'TechSaksham',
     period: 'August 2024 – November 2024',
     type: 'internship',
+    theme: 'emerald',
     badge: 'Internship',
     isLatest: false,
     description:
@@ -59,6 +62,7 @@ const timelineData = [
     organization: 'Major Hemant Jakate Institute of Science',
     period: '2022',
     type: 'education',
+    theme: 'amber',
     badge: 'Higher Secondary',
     isLatest: false,
     description:
@@ -72,6 +76,7 @@ const timelineData = [
     organization: 'St. Paul High School',
     period: '2020',
     type: 'schooling',
+    theme: 'violet',
     badge: 'Schooling',
     isLatest: false,
     description:
@@ -87,30 +92,39 @@ const TimelineItem = ({ item, index, isVisible }) => {
   const positionClass = isLeft ? 'timeline-item-left' : 'timeline-item-right';
   const latestClass = item.isLatest ? 'is-latest' : '';
   const visibleClass = isVisible ? 'is-in-view' : '';
+  const themeClass = `theme-${item.theme || item.type}`;
 
   return (
     <article
-      className={`timeline-item ${positionClass} ${latestClass} ${visibleClass}`}
+      className={`timeline-item ${positionClass} ${latestClass} ${visibleClass} ${themeClass}`}
       id={`timeline-item-${item.id}`}
       aria-label={`${item.title} (${item.period})`}
     >
       {/* Central Interactive / Glowing Dot with Distinct Category Icon */}
-      <div className={`timeline-dot-wrapper ${latestClass}`} aria-hidden="true">
+      <div className={`timeline-dot-wrapper ${latestClass} ${themeClass}`} aria-hidden="true">
         <div className="timeline-dot-core">
           <IconComponent className="timeline-dot-icon" />
         </div>
-        {item.isLatest && <span className="timeline-pulse-ring" />}
+        {item.isLatest && (
+          <>
+            <span className="timeline-pulse-ring" />
+            <span className="timeline-pulse-ring-outer" />
+          </>
+        )}
       </div>
 
       {/* Connecting Arm from Axis to Card (Desktop) */}
-      <div className="timeline-connector" aria-hidden="true" />
+      <div className={`timeline-connector ${themeClass}`} aria-hidden="true" />
 
       {/* Timeline Card */}
-      <div className={`timeline-card ${latestClass}`}>
+      <div className={`timeline-card ${latestClass} ${themeClass}`}>
+        {/* Luminous Top Accent Bar */}
+        <div className="timeline-card-accent-bar" aria-hidden="true" />
+
         {/* Header with Badges and Period */}
         <div className="timeline-card-header">
           <div className="timeline-badges-wrap">
-            <span className={`timeline-category-tag type-${item.type}`}>
+            <span className={`timeline-category-tag ${themeClass} type-${item.type}`}>
               {item.badge}
             </span>
             {item.isLatest && (
@@ -120,7 +134,7 @@ const TimelineItem = ({ item, index, isVisible }) => {
               </span>
             )}
           </div>
-          <div className="timeline-date-chip">
+          <div className={`timeline-date-chip ${themeClass}`}>
             <FaCalendarAlt className="timeline-date-icon" />
             <time>{item.period}</time>
           </div>
@@ -131,7 +145,7 @@ const TimelineItem = ({ item, index, isVisible }) => {
 
         {/* Organization / Institute */}
         {item.organization && (
-          <p className="timeline-organization">
+          <p className={`timeline-organization ${themeClass}`}>
             <FaMapMarkerAlt className="timeline-org-icon" />
             <span>{item.organization}</span>
           </p>
@@ -144,7 +158,7 @@ const TimelineItem = ({ item, index, isVisible }) => {
         {item.skills && item.skills.length > 0 && (
           <div className="timeline-skills-list" aria-label="Key competencies and skills">
             {item.skills.map((skill, sIdx) => (
-              <span key={sIdx} className="timeline-skill-pill">
+              <span key={sIdx} className={`timeline-skill-pill ${themeClass}`}>
                 {skill}
               </span>
             ))}
@@ -240,10 +254,16 @@ const Timeline = () => {
       id="timeline-section"
       aria-label="My Journey timeline"
     >
-      <div className="timeline-header-wrap">
-        <h2 className="timeline-title">My Journey</h2>
-        <p className="timeline-subtitle">
-          My academic foundation, internships, and journey into Generative AI & Software Engineering.
+      {/* Ambient Atmospheric Lighting Halos */}
+      <div className="timeline-ambient-halo halo-top" aria-hidden="true" />
+      <div className="timeline-ambient-halo halo-bottom" aria-hidden="true" />
+
+      <div className="timeline-header-wrap section-header-block">
+        <h2 className="section-title" data-watermark="JOURNEY">
+          My <span className="title-accent">Journey<span className="title-dot">.</span></span>
+        </h2>
+        <p className="section-subtitle">
+          My academic foundation, internships, and journey into Generative AI &amp; Software Engineering.
         </p>
       </div>
 
