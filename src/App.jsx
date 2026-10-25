@@ -484,6 +484,13 @@ const TypewriterName = () => {
   );
 };
 
+// Direct background email delivery configuration (No .env file required)
+const EMAILJS_CONFIG = {
+  serviceId: 'service_l75qeru',
+  templateId: 'template_s9vctl2',
+  publicKey: 'QNc1voZjpHiRBZfG5',
+};
+
 function App() {
   const [selectedCert, setSelectedCert] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -538,53 +545,37 @@ function App() {
     return () => observer.disconnect();
   }, []);
 
-  const handleContactSubmit = (e) => {
+  const handleContactSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
 
     setIsSubmitting(true);
     setFormError(null);
 
-    // Reliable EmailJS fallback credentials so background delivery works seamlessly
-    // even if Vite dev server hadn't reloaded .env or on static host deployments
-    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_l75qeru';
-    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_s9vctl2';
-    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'QNc1voZjpHiRBZfG5';
+    try {
+      await emailjs.send(
+        EMAILJS_CONFIG.serviceId,
+        EMAILJS_CONFIG.templateId,
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message,
+          reply_to: formData.email,
+          to_name: 'Vikrant Chakole',
+          to_email: 'vikrantchakole36@gmail.com',
+        },
+        EMAILJS_CONFIG.publicKey
+      );
 
-    if (serviceId && templateId && publicKey) {
-      emailjs
-        .send(
-          serviceId,
-          templateId,
-          {
-            from_name: formData.name,
-            from_email: formData.email,
-            message: formData.message,
-            reply_to: formData.email,
-            to_name: 'Vikrant Chakole',
-            to_email: 'vikrantchakole36@gmail.com',
-          },
-          publicKey
-        )
-        .then(() => {
-          setIsSubmitting(false);
-          setFormSent(true);
-          setFormError(null);
-          setFormData({ name: '', email: '', message: '' });
-          setTimeout(() => setFormSent(false), 6000);
-        })
-        .catch((error) => {
-          console.error('EmailJS delivery error:', error?.text || error);
-          setIsSubmitting(false);
-          setFormError('Unable to send automatically right now. You can click below to send via your email client:');
-        });
-    } else {
-      // Direct mailto fallback when API keys are not configured
       setIsSubmitting(false);
-      window.location.href = `mailto:vikrantchakole36@gmail.com?subject=Portfolio Inquiry from ${encodeURIComponent(formData.name)}&body=${encodeURIComponent(formData.message + '\n\nSender: ' + formData.name + ' (' + formData.email + ')')}`;
       setFormSent(true);
+      setFormError(null);
       setFormData({ name: '', email: '', message: '' });
-      setTimeout(() => setFormSent(false), 5000);
+      setTimeout(() => setFormSent(false), 6000);
+    } catch (error) {
+      console.error('Email delivery error:', error?.text || error);
+      setIsSubmitting(false);
+      setFormError('Unable to send automatically right now. You can click below to send via your email client:');
     }
   };
 
