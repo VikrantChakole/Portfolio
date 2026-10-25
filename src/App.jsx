@@ -491,6 +491,7 @@ function App() {
   const [activeSection, setActiveSection] = useState('home');
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [formSent, setFormSent] = useState(false);
+  const [formError, setFormError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showAllCerts, setShowAllCerts] = useState(false);
   const [emailCopied, setEmailCopied] = useState(false);
@@ -542,10 +543,13 @@ function App() {
     if (!formData.name || !formData.email || !formData.message) return;
 
     setIsSubmitting(true);
+    setFormError(null);
 
-    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+    // Reliable EmailJS fallback credentials so background delivery works seamlessly
+    // even if Vite dev server hadn't reloaded .env or on static host deployments
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_l75qeru';
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_s9vctl2';
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'QNc1voZjpHiRBZfG5';
 
     if (serviceId && templateId && publicKey) {
       emailjs
@@ -565,19 +569,17 @@ function App() {
         .then(() => {
           setIsSubmitting(false);
           setFormSent(true);
+          setFormError(null);
           setFormData({ name: '', email: '', message: '' });
-          setTimeout(() => setFormSent(false), 5000);
+          setTimeout(() => setFormSent(false), 6000);
         })
         .catch((error) => {
-          console.error('EmailJS error:', error?.text || error);
+          console.error('EmailJS delivery error:', error?.text || error);
           setIsSubmitting(false);
-          window.location.href = `mailto:vikrantchakole36@gmail.com?subject=Contact from ${encodeURIComponent(formData.name)}&body=${encodeURIComponent(formData.message + '\n\nFrom: ' + formData.name + ' (' + formData.email + ')')}`;
-          setFormSent(true);
-          setFormData({ name: '', email: '', message: '' });
-          setTimeout(() => setFormSent(false), 5000);
+          setFormError('Unable to send automatically right now. You can click below to send via your email client:');
         });
     } else {
-      // Direct mailto fallback when API keys are not yet configured
+      // Direct mailto fallback when API keys are not configured
       setIsSubmitting(false);
       window.location.href = `mailto:vikrantchakole36@gmail.com?subject=Portfolio Inquiry from ${encodeURIComponent(formData.name)}&body=${encodeURIComponent(formData.message + '\n\nSender: ' + formData.name + ' (' + formData.email + ')')}`;
       setFormSent(true);
@@ -1362,6 +1364,26 @@ function App() {
                   </div>
                 ) : (
                   <form onSubmit={handleContactSubmit} className="contact-form">
+                    {formError && (
+                      <div className="form-error-banner" style={{
+                        padding: '12px 16px',
+                        background: 'rgba(239, 68, 68, 0.12)',
+                        border: '1px solid rgba(239, 68, 68, 0.35)',
+                        borderRadius: '10px',
+                        marginBottom: '16px',
+                        color: '#fca5a5',
+                        fontSize: '0.88rem',
+                        lineHeight: '1.4'
+                      }}>
+                        <p style={{ margin: '0 0 8px 0' }}>{formError}</p>
+                        <a
+                          href={`mailto:vikrantchakole36@gmail.com?subject=Portfolio Inquiry from ${encodeURIComponent(formData.name || 'Visitor')}&body=${encodeURIComponent((formData.message || '') + '\n\nSender: ' + (formData.name || '') + ' (' + (formData.email || '') + ')')}`}
+                          style={{ color: '#38bdf8', textDecoration: 'underline', fontWeight: 600 }}
+                        >
+                          Send via Email App →
+                        </a>
+                      </div>
+                    )}
                     <div className="form-group">
                       <label htmlFor="contact-name">Your Name</label>
                       <input
